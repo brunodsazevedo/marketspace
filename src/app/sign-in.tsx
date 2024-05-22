@@ -1,5 +1,5 @@
 import { Keyboard, Text, TouchableWithoutFeedback, View } from 'react-native'
-import { Link } from 'expo-router'
+import { router } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Button } from '@/components/button'
@@ -9,11 +9,15 @@ import { InputPassword } from '@/components/forms/input-password'
 import LogoSvg from '@/assets/logo.svg'
 
 export default function SignIn() {
+  function handleGoSignUp() {
+    router.push('/sign-up')
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView
         edges={['bottom']}
-        className="flex-1bg-neutral-100"
+        className="flex-1 bg-neutral-100"
       >
         <View className="items-center justify-between rounded-b-3xl py-24 px-10 space-y-20 bg-neutral-200">
           <View className="items-center justify-center space-y-6">
@@ -53,11 +57,15 @@ export default function SignIn() {
         </View>
 
         <View className="items-center justify-center space-y-4 px-10 py-14 bg-neutral-100">
-          <Link href="/" className="font-body text-sm text-center neutral-600">
+          <Text className="font-body text-sm text-center neutral-600">
             Ainda não tem acesso?
-          </Link>
+          </Text>
 
-          <Button variant="secondary" title="Criar uma conta" />
+          <Button
+            variant="secondary"
+            title="Criar uma conta"
+            onPress={handleGoSignUp}
+          />
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
