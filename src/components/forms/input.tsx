@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Text, TextInput, TextInputProps, View } from 'react-native'
+import { TextInput, TextInputProps, View } from 'react-native'
 import { twMerge } from 'tailwind-merge'
 import nwColors from 'tailwindcss/colors'
 
@@ -17,7 +17,11 @@ export function Input({ className, ...rest}: Props) {
         onBlur={() => setIsFocus(false)}
         placeholderTextColor={nwColors.neutral[400]}
         className={
-          twMerge('w-full px-4 py-3 rounded-md border border-white bg-white', isFocus && 'border-neutral-500',className)
+          twMerge(
+            'w-full px-4 py-3 rounded-md border font-title text-base text-neutral-600 border-white bg-white',
+            isFocus && 'border-neutral-500',
+            className,
+          )
         }
         {...rest}
       />
