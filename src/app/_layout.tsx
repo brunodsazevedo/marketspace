@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import { useFonts, Karla_500Medium, Karla_700Bold } from '@expo-google-fonts/karla'
 
 export default function RootLayout() {
@@ -12,6 +13,13 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }} initialRouteName="/sign-in" />
+    <>
+      <StatusBar
+        backgroundColor="transparent"
+        style="dark"
+        translucent
+      />
+      <Stack screenOptions={{ headerShown: false }} initialRouteName="/sign-in" />
+    </>
   )
 }
