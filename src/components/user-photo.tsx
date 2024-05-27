@@ -16,7 +16,7 @@ export function UserPhoto({ source, onPress }: Props) {
       <View className="rounded-full border-2 border-blue-300">
         <Image
           source={source ?? AvatarDefault}
-          className="h-20 w-20"
+          className="h-20 w-20 rounded-full"
         />
       </View>
 

@@ -1,16 +1,75 @@
+import { useState } from 'react'
 import { Keyboard, Text, TouchableWithoutFeedback, View } from 'react-native'
 import { router } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useForm, Controller } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import toast from 'react-native-toast-message'
 
 import { Button } from '@/components/button'
 import { Input } from '@/components/forms/input'
 import { InputPassword } from '@/components/forms/input-password'
 
+import { useAuth } from '@/hooks/use-auth'
+
+import { AppError } from '@/utils/AppError'
+
 import LogoSvg from '@/assets/logo.svg'
 
+type FormDataProps = {
+  email: string
+  password: string
+}
+
+const signInScheme = yup.object({
+  email: yup.string().required('E-mail é obrigatório').email('Informe um e-mail válido'),
+  password: yup.string().required('Senha é obrigatório'),
+})
+
 export default function SignIn() {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { onSignIn } = useAuth()
+
+  const { control, formState: { errors }, handleSubmit } = useForm({
+    resolver: yupResolver(signInScheme)
+  })  
+
   function handleGoSignUp() {
     router.push('/sign-up')
+  }
+
+  async function handleSignIn(dataForm: FormDataProps) {
+    try {
+      setIsLoading(true)
+      console.log(dataForm);
+      
+      await onSignIn(dataForm.email, dataForm.password)
+
+      setIsLoading(false)
+
+      router.push('/catalogs')
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+
+      if(error instanceof AppError) {
+        console.log(error.message)
+        
+        toast.show({
+          type: 'error',
+          text1: error.message,
+        })
+
+        return
+      }
+
+      toast.show({
+        type: 'error',
+        text1: 'Erro ao efetuar login!',
+      })
+    }
   }
 
   return (
@@ -40,19 +99,43 @@ export default function SignIn() {
             </Text>
 
             <View>
-              <Input
-                placeholder="E-mail"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { value, onChange } }) => (
+                  <Input
+                    value={value}
+                    onChangeText={onChange}
+                    placeholder="E-mail"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    errorMessage={errors.email && errors.email.message}
+                  />
+                )}
               />
             </View>
 
             <View>
-              <InputPassword placeholder="Senha" />
+              <Controller
+                control={control}
+                name="password"
+                render={({ field: { value, onChange } }) => (
+                  <InputPassword
+                    value={value}
+                    onChangeText={onChange}
+                    placeholder="Senha"
+                    errorMessage={errors.password && errors.password.message}
+                  />
+                )}
+              />
             </View>
 
-            <Button title="Entrar" />
+            <Button
+              title="Entrar"
+              loading={isLoading}
+              onPress={handleSubmit(handleSignIn)}
+            />
           </View>
         </View>
 
