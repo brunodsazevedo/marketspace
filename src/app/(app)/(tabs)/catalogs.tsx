@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button } from '@/components/button'
 import { InputSearch } from '@/components/forms/input-search'
 import { ModalBottom, BottomSheetModal } from '@/components/bottom-sheet'
+import { AdsItem } from '@/components/ads-item'
 
 import { FiltersModalContent } from '@/sections/catalogs/modal/filters-modal-content'
 
@@ -113,9 +114,9 @@ export default function Catalogs() {
           </View>
         </View>
 
-        <View>
-          <Text>
-            Condições
+        <View className="space-y-3">
+          <Text className="font-body text-sm text-neutral-500">
+            Compre produtos variados
           </Text>
 
           <View className="flex-row items-center space-x-2">
@@ -123,12 +124,14 @@ export default function Catalogs() {
               placeholder="Buscar anúncios"
               onFilters={handleShowFilters}
             />
-
-            <InputSearch
-              placeholder="Buscar anúncios"
-              onFilters={handleShowFilters}
-            />
           </View>
+        </View>
+
+        <View className="flex-row justify-between flex-wrap space-x-5">
+          <AdsItem />
+          <AdsItem />
+          <AdsItem />
+          <AdsItem />
         </View>
       </ScrollView>
 
