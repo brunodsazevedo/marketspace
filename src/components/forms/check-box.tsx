@@ -12,6 +12,7 @@ type Props = {
   disabled?: boolean
   value?: boolean | string
   onChange?: (value: boolean | string | undefined) => void
+  onPress?: () => void
 }
 
 export function CheckBox({
@@ -22,10 +23,16 @@ export function CheckBox({
   disabled = false,
   value,
   onChange,
+  onPress,
 }: Props) {
   const [isSelected, setIsSelected] = useState<boolean | string | undefined>(false)
 
   function handleToggleCheckBox() {
+    if(onPress) {
+      onPress()
+      return
+    }
+    
     setIsSelected((prevState) => {
       if (typeof prevState === 'string') {
         if (prevState.length === 0) {

@@ -2,19 +2,20 @@ import { useState } from 'react'
 import { Text, TextInput, TextInputProps, View } from 'react-native'
 import { twMerge } from 'tailwind-merge'
 import nwColors from 'tailwindcss/colors'
+import RNCurrencyInput, { CurrencyInputProps } from 'react-native-currency-input'
 
-type Props = TextInputProps & {
+type Props = CurrencyInputProps & {
   errorMessage?: string
 }
 
-export function Input({ errorMessage, className, ...rest}: Props) {
+export function CurrencyInput({ errorMessage, className, ...rest}: Props) {
   const [isFocus, setIsFocus] = useState(false)
 
   const isInvalid = !!errorMessage
 
   return (
     <View className="">
-      <TextInput
+      <RNCurrencyInput
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         placeholderTextColor={nwColors.neutral[400]}

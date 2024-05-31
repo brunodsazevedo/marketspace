@@ -7,6 +7,8 @@ import { SvgProps } from 'react-native-svg'
 type Props = TouchableOpacityProps & {
   variant?: 'primary' | 'secondary' | 'black'
   icon?: ElementType<SvgProps>
+  iconColor?: string
+  iconSize?: number
   children?: ReactNode
 }
 
@@ -14,6 +16,8 @@ export function IconButton(
   {
     variant = 'primary',
     icon: Icon,
+    iconColor,
+    iconSize = 20,
     className,
     children,
     ...rest
@@ -43,7 +47,11 @@ export function IconButton(
       {...rest}
     >
       {Icon && (
-        <Icon height={20} width={20} fill={iconVariantClasses[variant]} />
+        <Icon
+          height={iconSize}
+          width={iconSize}
+          fill={iconColor || iconVariantClasses[variant]}
+        />
       )}
 
       {children}

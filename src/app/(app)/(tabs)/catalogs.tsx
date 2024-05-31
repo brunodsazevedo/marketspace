@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { router } from 'expo-router'
 
 import { Button } from '@/components/button'
 import { InputSearch } from '@/components/forms/input-search'
@@ -29,6 +30,10 @@ export default function Catalogs() {
 
   function handleShowFilters() {
     modalFiltersRef.current?.present()
+  }
+
+  function handleAddNewAds() {
+    router.push('/ads/create/create-ads-form-step')
   }
 
   return (
@@ -73,6 +78,7 @@ export default function Catalogs() {
               variant="black"
               title="Criar anúncio"
               leftIcon={PlusSvg}
+              onPress={handleAddNewAds}
             />
           </View>
         </View>

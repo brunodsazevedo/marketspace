@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-nativ
 import { twJoin, twMerge } from 'tailwind-merge'
 import nwColors from 'tailwindcss/colors'
 import { SvgProps } from 'react-native-svg'
-import { isLoading } from 'expo-font'
+
 import { LoadingIndicator } from './loading-indicator'
 
 type Props = TouchableOpacityProps & {
@@ -73,13 +73,13 @@ export function Button(
       {loading ? (
         <LoadingIndicator size="small" color={loadingVariantClass[variant]} />
       ) : (
-        <>
+        <View className="flex-row items-center justify-center space-x-2">
           {LeftIcon && (
             <LeftIcon height={20} width={20} fill={leftIconVariantClasses[variant]} />
           )}
     
           {title && (
-            <View className="flex-1">
+            <View className="">
               <Text className={twJoin('font-heading text-base text-center', textVariantClasses[variant])}>
                 {title}
               </Text>
@@ -91,7 +91,7 @@ export function Button(
           )}
     
           {children}
-        </>
+        </View>
       )}
     </TouchableOpacity>
   )
