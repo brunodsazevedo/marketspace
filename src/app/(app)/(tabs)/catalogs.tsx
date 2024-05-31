@@ -6,7 +6,7 @@ import { router } from 'expo-router'
 import { Button } from '@/components/button'
 import { InputSearch } from '@/components/forms/input-search'
 import { ModalBottom, BottomSheetModal } from '@/components/bottom-sheet'
-import { AdsItem } from '@/components/ads-item'
+import { ProductItem } from '@/components/product-item'
 
 import { FiltersModalContent } from '@/sections/catalogs/modal/filters-modal-content'
 
@@ -134,10 +134,10 @@ export default function Catalogs() {
         </View>
 
         <View className="flex-row justify-between flex-wrap space-x-5">
-          <AdsItem />
-          <AdsItem />
-          <AdsItem />
-          <AdsItem />
+          {/* <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem /> */}
         </View>
       </ScrollView>
 
