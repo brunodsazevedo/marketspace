@@ -26,6 +26,7 @@ import { ProductDetailDTO } from '@/dtos/product-dto'
 
 import PlusSvg from '@/assets/plus.svg'
 import XCircleSvg from '@/assets/x-circle.svg'
+import { deleteProductImages } from '@/services/api/endpoints/delete-product-images'
 
 type FormDataProps = {
   id: string
@@ -122,11 +123,17 @@ export default function EditAdsFormStep() {
     }
   }
 
-  function handleRemoveImage(imageName: string) {
-    const images = getValues('images')
-    const imagesUpdated = images.filter((item) => item.name !== imageName)
-
-    setValue('images', imagesUpdated)
+  async function handleRemoveImage(imageName: string) {
+    try {
+      await deleteProductImages({ data: { productImagesIds: [ imageName ] } })
+  
+      const images = getValues('images')
+      const imagesUpdated = images.filter((item) => item.name !== imageName)
+  
+      setValue('images', imagesUpdated)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   function handleCheckOption(valueSelect: string) {
