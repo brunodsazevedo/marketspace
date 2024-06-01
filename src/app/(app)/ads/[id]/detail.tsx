@@ -19,6 +19,7 @@ import { queryClient } from '@/services/queryClient'
 import { api } from '@/services/api/api-config'
 import { getProductDetail } from '@/services/api/endpoints/get-product-detail'
 import { activeDisableProduct } from '@/services/api/endpoints/active-disable-product'
+import { deleteProduct } from '@/services/api/endpoints/delete-product'
 
 import { convertCentsToFloat } from '@/utils/convert-cents-to-float'
 import { getPaymentMethodIcon } from '@/utils/get-payment-method-icon'
@@ -39,6 +40,7 @@ type RouteParamsProps = {
 
 export default function DetailAds() {
   const modalConfirmActiveOrDisableProductRef = useRef<BottomSheetModal>(null)
+  const modalConfirmDeleteProductRef = useRef<BottomSheetModal>(null)
 
   const { user } = useAuth()
   const routeParams = useLocalSearchParams<RouteParamsProps>()
@@ -75,6 +77,35 @@ export default function DetailAds() {
       toast.show({
         type: 'error',
         text1: 'Erro ao editar anúncio',
+      })
+    },
+  })
+
+  const deleteProductMutation =useMutation({
+    mutationKey: ['deleteProduct'],
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      toast.show({
+        type: 'success',
+        text1: 'Anúncio excluído com sucesso!'
+      })
+
+      router.replace('/my-ads')
+    },
+    onError: (error) => {
+      console.log(error)
+      
+      if(error instanceof AppError) {
+        toast.show({
+          type: 'error',
+          text1: error.message,
+        })
+        return
+      }
+
+      toast.show({
+        type: 'error',
+        text1: 'Erro ao excluir anúncio',
       })
     },
   })
@@ -123,6 +154,19 @@ export default function DetailAds() {
         }
       }
     )
+  }
+
+  function handleConfirmDeleteProduct() {
+    modalConfirmDeleteProductRef.current?.present()
+  }
+
+  function handleDeleteProduct() {
+    modalConfirmDeleteProductRef.current?.dismiss()
+    deleteProductMutation.mutate(productDetailQuery.data?.id!)
+  }
+
+  function handleCloseModalConfirmDeleteProduct() {
+    modalConfirmDeleteProductRef.current?.dismiss()
   }
 
   return (
@@ -278,6 +322,8 @@ export default function DetailAds() {
             variant="secondary"
             title="Excluir anúncio"
             leftIcon={TrashSvg}
+            loading={deleteProductMutation.isPending}
+            onPress={handleConfirmDeleteProduct}
           />
         </SafeAreaView>
       ) : (
@@ -323,6 +369,35 @@ export default function DetailAds() {
               variant="secondary"
               title="Cancelar"
               onPress={handleCloseModalConfirmActiveOrDisableProduct}
+            />
+          </View>
+        </SafeAreaView>
+      </ModalBottom>
+
+      <ModalBottom
+        modalBottomRef={modalConfirmDeleteProductRef}
+        snapPoints={['35%', '35%']}
+      >
+        <SafeAreaView
+          edges={['bottom']}
+          className="flex-1 p-6 space-y-8"
+        >
+          <Text className="font-heading text-base text-center text-neutral-600">
+            Deseja realmente excluir o anúncio?
+          </Text>
+
+          <View className="flex-1 justify-end space-y-2">
+            
+            <Button
+              title="Sim, excluir!"
+              className="bg-red-500"
+              onPress={handleDeleteProduct}
+            />
+
+            <Button
+              variant="secondary"
+              title="Cancelar"
+              onPress={handleCloseModalConfirmDeleteProduct}
             />
           </View>
         </SafeAreaView>
