@@ -41,8 +41,15 @@ export default function MyAds() {
     initialData: []
   })
 
+  console.log(JSON.stringify(userProductsQuery.data, null, 1));
+  
+
   function handleAddNewAds() {
     router.push('/ads/create/create-ads-form-step')
+  }
+
+  function handleShowDetailAds(productId: string) {
+    router.push(`/ads/${productId}/detail`)
   }
 
   return (
@@ -75,7 +82,10 @@ export default function MyAds() {
           numColumns={2}
           renderItem={({ item }) => (
             <View className="basis-1/2 px-3 mb-5">
-              <ProductItem data={item} />
+              <ProductItem
+                data={item}
+                onPress={() => handleShowDetailAds(item.id)}
+              />
             </View>
           )}
           ListHeaderComponent={

@@ -22,3 +22,12 @@ export type ProductDTO = {
   product_images: ProductImage[];
   payment_methods: PaymentMethod[];
 }
+
+export type ProductDetailDTO = ProductDTO & {
+  user_id: string
+  user: {
+    avatar: string
+    name: string
+    tel: string
+  }
+}
