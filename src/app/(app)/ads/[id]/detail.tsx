@@ -18,6 +18,8 @@ import { getProductDetail } from '@/services/api/endpoints/get-product-detail'
 import { convertCentsToFloat } from '@/utils/convert-cents-to-float'
 import { getPaymentMethodIcon } from '@/utils/get-payment-method-icon'
 
+import { ProductDetailDTO } from '@/dtos/product-dto'
+
 import ArrowLeftSvg from '@/assets/arrow-left.svg'
 import PencilSimpleLineSvg from '@/assets/pencil-simple-line.svg'
 import PowerSvg from '@/assets/power.svg'
@@ -54,6 +56,15 @@ export default function DetailAds() {
     router.back()
   }
 
+  function handleEditAds(product: ProductDetailDTO) {
+    router.push({
+      pathname: `/ads/${product.id}/edit/edit-ads-form-step`,
+      params: {
+        adsData: JSON.stringify(product)
+      }
+    })
+  }
+
   return (
     <View className="flex-1 bg-neutral-200">
       <SafeAreaView
@@ -74,6 +85,7 @@ export default function DetailAds() {
             iconSize={24}
             iconColor={themeColors.neutral[700]}
             className="bg-transparent p-0"
+            onPress={() => handleEditAds(productDetailQuery.data!)}
           />
         )}
       </SafeAreaView>
