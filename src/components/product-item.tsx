@@ -47,6 +47,16 @@ export function ProductItem({ data, onPress }: Props) {
               </Text>
             </View>
           </View>
+
+          {!data.is_active && (
+            <View className="absolute h-full w-full rounded-lg bg-neutral-700/40">
+              <View className="flex-1 justify-end p-2">
+                <Text className="font-heading text-xs uppercase text-neutral-100">
+                  Anúncio desativado
+                </Text>
+              </View>
+            </View>
+          )}
         </View>
 
         <Text className="font-body text-sm text-neutral-600">

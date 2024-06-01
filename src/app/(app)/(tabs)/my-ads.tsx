@@ -40,10 +40,7 @@ export default function MyAds() {
     queryFn: getUserProducts,
     initialData: []
   })
-
-  console.log(JSON.stringify(userProductsQuery.data, null, 1));
   
-
   function handleAddNewAds() {
     router.push('/ads/create/create-ads-form-step')
   }
