@@ -159,7 +159,7 @@ export default function MyAds() {
               </View>
             }
             ListEmptyComponent={
-              <EmptyList message="Cadastre seu primeiro produto!" />
+              <EmptyList message="Não há produtos a serem listados!" />
             }
           />
         )}

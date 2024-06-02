@@ -25,6 +25,7 @@ import ArrowRightSvg from '@/assets/arrow-right.svg'
 import TagSvg from '@/assets/tag.svg'
 import DefaultAvatar from '@/assets/avatar-default.png'
 import { CatalogsLoader } from '@/sections/catalogs/catalogs-loader'
+import { EmptyList } from '@/components/empty-list'
 
 export default function Catalogs() {
   const [inputQuery, setInputQuery] = useState('')
@@ -221,6 +222,9 @@ export default function Catalogs() {
                 </View>
               </View>
             </View>
+          }
+          ListEmptyComponent={
+            <EmptyList message="Não há produtos a serem listados!" />
           }
         />
       )}
