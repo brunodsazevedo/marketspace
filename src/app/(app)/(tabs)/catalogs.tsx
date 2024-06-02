@@ -71,6 +71,10 @@ export default function Catalogs() {
     }))
   }
 
+  function handleGoMyAds() {
+    router.push('/my-ads')
+  }
+
   return (
     <SafeAreaView
       edges={['top']}
@@ -159,6 +163,7 @@ export default function Catalogs() {
                   <TouchableOpacity
                     activeOpacity={0.7}
                     className="flex-row items-center space-x-1"
+                    onPress={handleGoMyAds}
                   >
                     <Text className="font-heading text-sm text-blue-500">
                       Meus anúncios

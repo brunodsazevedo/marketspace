@@ -15,6 +15,7 @@ import { getUserProducts } from '@/services/api/endpoints/get-user-products'
 import themeColors from '@/theme/colors'
 
 import PlusIcon from '@/assets/plus.svg'
+import { twMerge } from 'tailwind-merge'
 
 export default function MyAds() {
   const [statusOptions, setStatusOptions] = useState<OptionProps[]>([
@@ -122,7 +123,12 @@ export default function MyAds() {
             </View>
           )}
           ListHeaderComponent={
-            <View className="flex-row items-center justify-between px-3 pt-2 pb-6">
+            <View className={
+              twMerge(
+                'flex-row items-center justify-between px-3 pt-2 pb-6',
+                productsDataFiltered.length === 0 && 'px-6'
+              )
+            }>
               <Text className="font-body text-sm text-neutral-600">
                 {productsDataFiltered.length} anúncio(s)
               </Text>
