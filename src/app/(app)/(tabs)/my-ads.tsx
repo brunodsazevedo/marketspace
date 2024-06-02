@@ -41,12 +41,48 @@ export default function MyAds() {
     initialData: []
   })
   
+  const statusSelected = statusOptions.find((item) => item.selected)
+
+  const productsDataFiltered = userProductsQuery.data?.filter((product) => {
+    if (statusSelected?.value === 'active' && product.is_active) {
+      return true
+    }
+  
+    if (statusSelected?.value === 'disable' && !product.is_active) {
+      return true
+    }
+  
+    if (statusSelected?.value === 'all') {
+      return true
+    }
+  
+    return false; // Caso nenhum dos valores corresponda, retorna false explicitamente
+  }) || []
+
   function handleAddNewAds() {
     router.push('/ads/create/create-ads-form-step')
   }
 
   function handleShowDetailAds(productId: string) {
     router.push(`/ads/${productId}/detail`)
+  }
+
+  function handleSelectOption(valueOption: string) {
+    const statusOptionsUpdated = statusOptions.map((option) => {
+      if(option.value === valueOption) {
+        return {
+          ...option,
+          selected: true
+        }
+      }
+
+      return {
+        ...option,
+        selected: false,
+      }
+    })
+
+    setStatusOptions(statusOptionsUpdated)
   }
 
   return (
@@ -66,11 +102,11 @@ export default function MyAds() {
 
       <View className="flex-1">
         <FlatList
-          data={userProductsQuery.data}
+          data={productsDataFiltered}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={
-            userProductsQuery.data.length === 0 ? {
+            productsDataFiltered.length === 0 ? {
               flex: 1,
             } : {
               paddingHorizontal: 12,
@@ -88,10 +124,14 @@ export default function MyAds() {
           ListHeaderComponent={
             <View className="flex-row items-center justify-between px-3 pt-2 pb-6">
               <Text className="font-body text-sm text-neutral-600">
-                9 anúncios
+                {productsDataFiltered.length} anúncio(s)
               </Text>
 
-              <Select options={statusOptions} />
+              <Select
+                value={statusSelected?.value}
+                onChange={handleSelectOption}
+                options={statusOptions}
+              />
             </View>
           }
           ListEmptyComponent={
