@@ -16,7 +16,7 @@ export type ProductDTO = {
   price: number;
   accept_trade: boolean;
   user_id: string;
-  is_active: boolean;
+  is_active?: boolean;
   created_at: string;
   updated_at: string;
   product_images: ProductImage[];

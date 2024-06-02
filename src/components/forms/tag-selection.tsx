@@ -7,18 +7,22 @@ type Props = {
   label: string
   selected?: boolean
   disabled?: boolean
-  onChange?: () => void
+  onPress?: () => void
 }
 
-export function TagSelection({ label, disabled = false, selected }: Props) {
+export function TagSelection({ label, disabled = false, selected, onPress }: Props) {
   return (
-    <TouchableOpacity disabled={disabled} activeOpacity={0.7}>
+    <TouchableOpacity
+      disabled={disabled}
+      activeOpacity={0.7}
+      onPress={onPress}
+    >
       <View
         className={
           twMerge(
             'flex-row items-center px-4 py-1.5 rounded-full space-x-1.5 bg-neutral-300',
-            selected && 'bg-blue-300',
-            !disabled && 'pr-1.5',
+            selected && 'pr-1.5 bg-blue-300',
+            // !disabled && 'pr-1.5',
           )
         }
       >

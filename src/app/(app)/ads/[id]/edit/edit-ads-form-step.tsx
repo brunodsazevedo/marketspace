@@ -368,7 +368,7 @@ export default function EditAdsFormStep() {
                 <Controller
                   control={control}
                   name="payment_methods"
-                  render={({ field: { value, onChange } }) => (
+                  render={({ field: { value } }) => (
                     <View className="space-y-2">
                       <View>
                         <CheckBox
