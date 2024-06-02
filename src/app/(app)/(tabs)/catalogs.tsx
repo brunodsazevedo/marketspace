@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { router } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import { useQuery } from '@tanstack/react-query'
 import { twMerge } from 'tailwind-merge'
 
@@ -24,16 +24,22 @@ import PlusSvg from '@/assets/plus.svg'
 import ArrowRightSvg from '@/assets/arrow-right.svg'
 import TagSvg from '@/assets/tag.svg'
 import DefaultAvatar from '@/assets/avatar-default.png'
+import { CatalogsLoader } from '@/sections/catalogs/catalogs-loader'
 
 export default function Catalogs() {
   const [inputQuery, setInputQuery] = useState('')
   const [filtersProduct, setFiltersProduct] = useState<FiltersProductFormProps | undefined>(undefined)
 
   const modalFiltersRef = useRef<BottomSheetModal>(null)
+  const firstTimeRef = useRef(true)
 
   const { user } = useAuth()
   
-  const { isFetching: isProductsDataFetching, data: productsData } = useQuery({
+  const {
+      isFetching: isProductsDataFetching,
+      data: productsData,
+      refetch: refetchProducts
+    } = useQuery({
     initialData: [],
     queryKey: ['products', filtersProduct],
     queryFn: () => getProducts({
@@ -43,7 +49,7 @@ export default function Catalogs() {
     })
   })
 
-  const { data: userProductsData } = useQuery({
+  const { data: userProductsData, refetch: refetchUserProduct } = useQuery({
     initialData: [],
     queryKey: ['userAds'],
     queryFn: getUserProducts,
@@ -81,6 +87,18 @@ export default function Catalogs() {
   function handleGoMyAds() {
     router.push('/my-ads')
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      if (firstTimeRef.current) {
+        firstTimeRef.current = false
+        return
+      }
+
+      refetchProducts()
+      refetchUserProduct()
+    }, []),
+  )
 
   return (
     <SafeAreaView
@@ -120,89 +138,92 @@ export default function Catalogs() {
         </View>
       </View>
 
-      <FlatList
-        data={productsData}
-        keyExtractor={(item) => item.id}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={
-          productsData.length === 0 ? {
-            flex: 1,
-          } : {
-            paddingHorizontal: 12,
-            paddingBottom: 64,
-        }}
-        numColumns={2}
-        renderItem={({ item }) => (
-          <View className="basis-1/2 px-3 mb-5">
-            <ProductItem
-              data={item}
-              onPress={() => handleShowDetailAds(item.id)}
-            />
-          </View>
-        )}
-        ListHeaderComponent={
-          <View className={
-            twMerge(
-              'space-y-9 px-3 pb-8',
-              productsData.length === 0 && 'px-6'
-            )
-          }>
-            <View className="space-y-3">
-              <Text className="font-body text-sm text-neutral-500">
-                Seus produtos anunciados para venda
-              </Text>
-
-              <View className="flex-row items-center justify-between px-4 py-3 rounded-md bg-blue-300/10">
-                <View className="flex-row items-center space-x-4">
-                  <TagSvg height={22} fill={themeColors.blue[500]} />
-
-                  <View>
-                    <Text className="font-heading text-xl text-neutral-600">
-                      {userProductsData.length}{'\n'}
-                      <Text className="font-body text-sm">
-                        anúncios ativos
+      {isProductsDataFetching ? (
+        <CatalogsLoader />
+      ) : (
+        <FlatList
+          data={productsData}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={
+            productsData.length === 0 ? {
+              flex: 1,
+            } : {
+              paddingHorizontal: 12,
+              paddingBottom: 64,
+          }}
+          numColumns={2}
+          renderItem={({ item }) => (
+            <View className="basis-1/2 px-3 mb-5">
+              <ProductItem
+                data={item}
+                onPress={() => handleShowDetailAds(item.id)}
+              />
+            </View>
+          )}
+          ListHeaderComponent={
+            <View className={
+              twMerge(
+                'space-y-9 px-3 pb-8',
+                productsData.length === 0 && 'px-6'
+              )
+            }>
+              <View className="space-y-3">
+                <Text className="font-body text-sm text-neutral-500">
+                  Seus produtos anunciados para venda
+                </Text>
+  
+                <View className="flex-row items-center justify-between px-4 py-3 rounded-md bg-blue-300/10">
+                  <View className="flex-row items-center space-x-4">
+                    <TagSvg height={22} fill={themeColors.blue[500]} />
+  
+                    <View>
+                      <Text className="font-heading text-xl text-neutral-600">
+                        {userProductsData.length}{'\n'}
+                        <Text className="font-body text-sm">
+                          anúncios ativos
+                        </Text>
                       </Text>
-                    </Text>
+                    </View>
+                  </View>
+  
+                  <View>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      className="flex-row items-center space-x-1"
+                      onPress={handleGoMyAds}
+                    >
+                      <Text className="font-heading text-sm text-blue-500">
+                        Meus anúncios
+                      </Text>
+  
+                      <ArrowRightSvg
+                        height={16}
+                        fill={themeColors.blue[500]}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
-
-                <View>
-                  <TouchableOpacity
-                    activeOpacity={0.7}
-                    className="flex-row items-center space-x-1"
-                    onPress={handleGoMyAds}
-                  >
-                    <Text className="font-heading text-sm text-blue-500">
-                      Meus anúncios
-                    </Text>
-
-                    <ArrowRightSvg
-                      height={16}
-                      fill={themeColors.blue[500]}
-                    />
-                  </TouchableOpacity>
+              </View>
+  
+              <View className="space-y-3">
+                <Text className="font-body text-sm text-neutral-500">
+                  Compre produtos variados
+                </Text>
+  
+                <View className="flex-row items-center space-x-2">
+                  <InputSearch
+                    value={inputQuery}
+                    onChangeText={setInputQuery}
+                    placeholder="Buscar anúncios"
+                    onFilters={handleShowFilters}
+                    onSearch={handleApplyQueryFilter}
+                  />
                 </View>
               </View>
             </View>
-
-            <View className="space-y-3">
-              <Text className="font-body text-sm text-neutral-500">
-                Compre produtos variados
-              </Text>
-
-              <View className="flex-row items-center space-x-2">
-                <InputSearch
-                  value={inputQuery}
-                  onChangeText={setInputQuery}
-                  placeholder="Buscar anúncios"
-                  onFilters={handleShowFilters}
-                  onSearch={handleApplyQueryFilter}
-                />
-              </View>
-            </View>
-          </View>
-        }
-      />
+          }
+        />
+      )}
 
       <ModalBottom
         modalBottomRef={modalFiltersRef}
