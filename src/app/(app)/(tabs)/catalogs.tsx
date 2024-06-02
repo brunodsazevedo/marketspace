@@ -9,14 +9,16 @@ import { Button } from '@/components/button'
 import { InputSearch } from '@/components/forms/input-search'
 import { ModalBottom, BottomSheetModal } from '@/components/bottom-sheet'
 import { ProductItem } from '@/components/product-item'
-import { getUserProducts } from '@/services/api/endpoints/get-user-products'
+import { EmptyList } from '@/components/empty-list'
 
+import { CatalogsLoader } from '@/sections/catalogs/catalogs-loader'
 import { FiltersModalContent, FiltersProductFormProps } from '@/sections/catalogs/modal/filters-modal-content'
 
 import { useAuth } from '@/hooks/use-auth'
 
 import { api } from '@/services/api/api-config'
 import { getProducts } from '@/services/api/endpoints/get-products'
+import { getUserProducts } from '@/services/api/endpoints/get-user-products'
 
 import themeColors from '@/theme/colors'
 
@@ -24,8 +26,6 @@ import PlusSvg from '@/assets/plus.svg'
 import ArrowRightSvg from '@/assets/arrow-right.svg'
 import TagSvg from '@/assets/tag.svg'
 import DefaultAvatar from '@/assets/avatar-default.png'
-import { CatalogsLoader } from '@/sections/catalogs/catalogs-loader'
-import { EmptyList } from '@/components/empty-list'
 
 export default function Catalogs() {
   const [inputQuery, setInputQuery] = useState('')
