@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Image, ScrollView, Text, View } from 'react-native'
+import { Image, Linking, ScrollView, Text, View } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -33,6 +33,7 @@ import PowerSvg from '@/assets/power.svg'
 import TrashSvg from '@/assets/trash-simple.svg'
 import AvatarDefaultImg from '@/assets/avatar-default.png'
 import WhatsAppImg from '@/assets/whatsapp-logo-fill.svg'
+import { Skeleton } from '@/components/skeleton'
 
 type RouteParamsProps = {
   id: string
@@ -169,6 +170,10 @@ export default function DetailAds() {
     modalConfirmDeleteProductRef.current?.dismiss()
   }
 
+  async function handleWhatsAppContact() {
+    Linking.openURL(`https://wa.me/${productDetailQuery.data?.user.tel}?text=Oi+${productDetailQuery.data?.user.name}%21+Gostaria+de+solicitar+um+or%C3%A7amento+de+projeto+%3A%29`)
+  }
+
   return (
     <View className="flex-1 bg-neutral-200">
       <SafeAreaView
@@ -200,97 +205,212 @@ export default function DetailAds() {
           className="space-y-6"
         >
           <View>
-            <ProductsSlideImages
-              data={productImages ?? []}
-            />
+            <Skeleton
+              isLoading={productDetailQuery.isFetching}
+              styles={{
+                width: '100%',
+                height: 256,
+              }}
+            >
+              <View>
+                <ProductsSlideImages
+                  data={productImages ?? []}
+                />
 
-            {!productDetailQuery.data?.is_active && (
-              <View className="absolute h-full w-full items-center justify-center bg-neutral-700/60">
-                <Text className="font-heading text-sm uppercase text-neutral-100">
-                  Anúncio desativado
-                </Text>
+                {!productDetailQuery.data?.is_active && (
+                  <View className="absolute h-full w-full items-center justify-center bg-neutral-700/60">
+                    <Text className="font-heading text-sm uppercase text-neutral-100">
+                      Anúncio desativado
+                    </Text>
+                  </View>
+                )}
               </View>
-            )}
+            </Skeleton>
           </View>
 
           <View className="p-6 space-y-6">
             <View className="flex-row items-center space-x-2">
               <View className="h-6 w-6 rounded-full border-2 border-blue-300">
-                <Image
-                  source={
-                    productDetailQuery.data?.user.avatar
-                    ? { uri: `${api.defaults.baseURL}/images/${productDetailQuery.data.user.avatar}` }
-                    : AvatarDefaultImg
-                  }
-                  className="h-full w-full rounded-full"
-                />
+                <Skeleton
+                  isLoading={productDetailQuery.isFetching}
+                  styles={{
+                    height: '100%',
+                    width: '100%',
+                    borderRadius: 12,
+                  }}
+                >
+                  <Image
+                    source={
+                      productDetailQuery.data?.user.avatar
+                      ? { uri: `${api.defaults.baseURL}/images/${productDetailQuery.data.user.avatar}` }
+                      : AvatarDefaultImg
+                    }
+                    className="h-full w-full rounded-full"
+                  />
+                </Skeleton>
               </View>
 
-              <Text className="font-body text-sm text-neutral-700">
-                {productDetailQuery.data?.user.name}
-              </Text>
+              <View>
+                <Skeleton
+                  isLoading={productDetailQuery.isFetching}
+                  styles={{
+                    height: 14,
+                    width: 100,
+                    borderRadius: 7,
+                  }}
+                >
+                  <Text className="font-body text-sm text-neutral-700">
+                    {productDetailQuery.data?.user.name}
+                  </Text>
+                </Skeleton>
+              </View>
             </View>
 
             <View className="space-y-2">
               <View className="flex-row">
-                <TagSelection
-                  label={productDetailQuery.data?.is_new ? 'Novo' : 'Usado'}
-                  disabled
-                />
+                <Skeleton
+                  isLoading={productDetailQuery.isFetching}
+                  styles={{
+                    height: 20,
+                    width: 72,
+                    borderRadius: 10,
+                  }}
+                >
+                  <TagSelection
+                    label={productDetailQuery.data?.is_new ? 'Novo' : 'Usado'}
+                    disabled
+                  />
+                </Skeleton>
               </View>
 
               <View className="flex-row items-start justify-between">
                 <View className="flex-1">
-                  <Text className="font-heading flex-wrap text-xl text-neutral-700">
-                    {productDetailQuery.data?.name}
-                  </Text>
+                  <Skeleton
+                    isLoading={productDetailQuery.isFetching}
+                    styles={{
+                      height: 20,
+                      width: 120,
+                      borderRadius: 10,
+                    }}
+                  >
+                    <Text className="font-heading flex-wrap text-xl text-neutral-700">
+                      {productDetailQuery.data?.name}
+                    </Text>
+                  </Skeleton>
                 </View>
 
-                <Text className="font-heading text-sm text-blue-300">
-                  R${' '}
-                  <Text className="text-xl">
-                    {priceFormatted}
-                  </Text>
-                </Text>
+                <View>
+                  <Skeleton
+                    isLoading={productDetailQuery.isFetching}
+                    styles={{
+                      height: 20,
+                      width: 142,
+                      borderRadius: 10,
+                    }}
+                  >
+                    <Text className="font-heading text-sm text-blue-300">
+                      R${' '}
+                      <Text className="text-xl">
+                        {priceFormatted}
+                      </Text>
+                    </Text>
+                  </Skeleton>
+                </View>
               </View>
 
-              <Text className="font-body text-sm text-neutral-600">
-                {productDetailQuery.data?.description}
-              </Text>
+              <View>
+                {productDetailQuery.isFetching && (
+                  <View className="space-y-2">
+                    <View>
+                      <Skeleton
+                        styles={{
+                          height: 14,
+                          width: '100%',
+                          borderRadius: 7,
+                        }}      
+                      />
+                    </View>
+
+                    <View>
+                      <Skeleton
+                        styles={{
+                          height: 14,
+                          width: '100%',
+                          borderRadius: 7,
+                        }}      
+                      />
+                    </View>
+
+                    <View>
+                      <Skeleton
+                        styles={{
+                          height: 14,
+                          width: '50%',
+                          borderRadius: 7,
+                        }}      
+                      />
+                    </View>
+                  </View>
+                )}
+
+                <Text className="font-body text-sm text-neutral-600">
+                  {productDetailQuery.data?.description}
+                </Text>
+              </View>
             </View>
 
             <View className="space-y-4">
               <View className="flex-row items-center space-x-2">
-                <Text className="font-heading text-sm text-neutral-600">
-                  Aceita troca?
-                </Text>
+                <Skeleton
+                  isLoading={productDetailQuery.isFetching}
+                  styles={{
+                    height: 14,
+                    width: 120,
+                    borderRadius: 7,
+                  }}
+                >
+                  <Text className="font-heading text-sm text-neutral-600">
+                    Aceita troca?
+                  </Text>
 
-                <Text className="font-body text-sm text-neutral-600">
-                  {productDetailQuery.data?.accept_trade ? 'Sim' : 'Não'}
-                </Text>
+                  <Text className="font-body text-sm text-neutral-600">
+                    {productDetailQuery.data?.accept_trade ? 'Sim' : 'Não'}
+                  </Text>
+                </Skeleton>
               </View>
 
               <Text className="font-heading text-sm text-neutral-600">
                 Meios de pagamentos
               </Text>
 
-              <View className="space-y-2">
-                {productDetailQuery.data?.payment_methods.map((paymentMethod) => {
-                  const PaymentMethodIcon = getPaymentMethodIcon(paymentMethod.key)
+              <View>
+                <Skeleton
+                  isLoading={productDetailQuery.isFetching}
+                  styles={{
+                    height: 200,
+                    width: '100%',
+                    borderRadius: 6,
+                  }}
+                >
+                  <View className="space-y-2">
+                    {productDetailQuery.data?.payment_methods.map((paymentMethod) => {
+                      const PaymentMethodIcon = getPaymentMethodIcon(paymentMethod.key)
 
-                  return (
-                    <View
-                      key={paymentMethod.key}
-                      className="flex-row items-center space-x-2"
-                    >
-                      <PaymentMethodIcon height={18} fill={themeColors.neutral[700]} />
+                      return (
+                        <View
+                          key={paymentMethod.key}
+                          className="flex-row items-center space-x-2"
+                        >
+                          <PaymentMethodIcon height={18} fill={themeColors.neutral[700]} />
 
-                      <Text className="font-body text-sm text-neutral-600">
-                        {paymentMethod.name}
-                      </Text>
-                    </View>
-                  )
-                })}
+                          <Text className="font-body text-sm text-neutral-600">
+                            {paymentMethod.name}
+                          </Text>
+                        </View>
+                      )
+                    })}
+                  </View>
+                </Skeleton>
               </View>
             </View>
           </View>
@@ -331,16 +451,20 @@ export default function DetailAds() {
           edges={['bottom']}
           className="flex-row items-center justify-between p-6 bg-neutral-100"
         >
-          <Text className="font-heading text-sm text-blue-500">
-            R${' '}
-            <Text className="text-2xl">
+          <View className="flex-row items-center">
+            <Text className="font-heading text-sm text-blue-500">
+              R${' '}
+            </Text>
+
+            <Text className="font-heading text-2xl text-blue-500">
               {priceFormatted}
             </Text>
-          </Text>
+          </View>
 
           <Button
             title="Entrar em contato"
             leftIcon={WhatsAppImg}
+            onPress={handleWhatsAppContact}
           />
         </SafeAreaView>
       )}

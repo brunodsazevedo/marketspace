@@ -36,7 +36,7 @@ export function ProductsSlideImages({ data }: Props) {
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={16}
         onViewableItemsChanged={indexChanged.current}
-        renderItem={({ item, index }) => {
+        renderItem={({ item }) => {
           return (
             <View className={`items-center justify-center h-64 w-[${width}]`}>
               <Image
