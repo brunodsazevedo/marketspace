@@ -9,6 +9,7 @@ import { Button } from '@/components/button'
 import { InputSearch } from '@/components/forms/input-search'
 import { ModalBottom, BottomSheetModal } from '@/components/bottom-sheet'
 import { ProductItem } from '@/components/product-item'
+import { getUserProducts } from '@/services/api/endpoints/get-user-products'
 
 import { FiltersModalContent, FiltersProductFormProps } from '@/sections/catalogs/modal/filters-modal-content'
 
@@ -31,7 +32,7 @@ export default function Catalogs() {
   const modalFiltersRef = useRef<BottomSheetModal>(null)
 
   const { user } = useAuth()
-
+  
   const { isFetching: isProductsDataFetching, data: productsData } = useQuery({
     initialData: [],
     queryKey: ['products', filtersProduct],
@@ -40,6 +41,12 @@ export default function Catalogs() {
         ...filtersProduct
       }
     })
+  })
+
+  const { data: userProductsData } = useQuery({
+    initialData: [],
+    queryKey: ['userAds'],
+    queryFn: getUserProducts,
   })
 
   const firstNameUser = user?.name.split(' ')[0]
@@ -151,7 +158,7 @@ export default function Catalogs() {
 
                   <View>
                     <Text className="font-heading text-xl text-neutral-600">
-                      4{'\n'}
+                      {userProductsData.length}{'\n'}
                       <Text className="font-body text-sm">
                         anúncios ativos
                       </Text>
