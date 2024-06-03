@@ -17,7 +17,9 @@
 </p>
 
 <p align="center">
-  [README EM VERSÃO INGLÊS](README.md)
+  <a href="https://github.com/brunodsazevedo/marketspace">
+    [README EM VERSÃO INGLÊS]
+  </a>
 </p>
 
 ## 💻 Projeto
