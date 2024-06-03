@@ -17,7 +17,9 @@
 </p>
 
 <p align="center">
-  [README PORTUGUESE-BR VERSION](README-PORTUGUESE-BR.md)
+  <a href="https://github.com/brunodsazevedo/marketspace/blob/master/README-PORTUGUESE-BR.md">
+    [README PORTUGUESE-BR VERSION]
+  </a>
 </p>
 
 ## 💻 Project
