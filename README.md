@@ -56,7 +56,7 @@ This project was developed with the following technologies:
 
 2. **Configure the local API**
 
-   NOTE: The application consumes a REST API for operations such as sign in, sign up, product registration, product listing, etc. At the moment, the backend API is not hosted. To use the application locally, download and use [this repository](https://github.com/brunodsazevedo/rentx-api).
+   NOTE: The application consumes a REST API for operations such as sign in, sign up, product registration, product listing, etc. At the moment, the backend API is not hosted. To use the application locally, download and use [this repository](https://github.com/brunodsazevedo/marketspace-api).
 
 3. **Adjust the axios base URL**
 
